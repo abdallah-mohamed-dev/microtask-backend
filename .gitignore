@@ -1,0 +1,11 @@
+uploads/projects/*
+!uploads/projects/.gitkeep
+uploads/tasks/*
+!uploads/tasks/.gitkeep
+/config/config.php
+.env
+vendor/
+*.log
+/.idea/
+/.vscode/
+
