@@ -117,7 +117,7 @@ class TaskService
         $stmt->execute([':id' => $taskId]);
     }
 
-    public function addTag(int $userId, int $taskId, array $data, bool $returnTask = true): array|void
+    public function addTag(int $userId, int $taskId, array $data, bool $returnTask = true): ?array
     {
         Http::requireFields($data, ['tag']);
         $this->get($taskId, $userId);
@@ -139,7 +139,7 @@ class TaskService
         return $this->get($taskId, $userId);
     }
 
-    public function addLink(int $userId, int $taskId, array $data, bool $returnTask = true): array|void
+    public function addLink(int $userId, int $taskId, array $data, bool $returnTask = true): ?array
     {
         Http::requireFields($data, ['url']);
         $this->get($taskId, $userId);

@@ -1,0 +1,24 @@
+Options -Indexes
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+
+    # Block direct access to sensitive folders
+    RewriteRule ^(config|src|vendor|public|\.git)(/|$) - [F,L]
+
+    # Block direct access to sensitive files
+    RewriteRule ^(composer\.(json|lock)|schema\.sql|README(\.api)?\.md|Important_info)$ - [F,L]
+
+    # Allow existing files/directories (uploads, assets, etc.) - serve them directly
+    RewriteCond %{REQUEST_FILENAME} -f
+    RewriteRule ^ - [L]
+
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - [L]
+
+    # All other requests go through the front controller
+    RewriteRule ^ index.php [L]
+</IfModule>
+
+

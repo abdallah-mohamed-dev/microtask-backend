@@ -9,6 +9,22 @@ use App\ProjectService;
 use App\TaskService;
 use App\UploadService;
 
+// Serve static files directly (uploads, images, etc.)
+$requestPath = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+$requestPath = ltrim($requestPath, '/');
+$filePath = __DIR__ . '/' . $requestPath;
+
+// If it's a file request and file exists, serve it directly
+if ($requestPath && !str_starts_with($requestPath, 'api/') && file_exists($filePath) && is_file($filePath)) {
+    $mimeType = mime_content_type($filePath);
+    if ($mimeType) {
+        header('Content-Type: ' . $mimeType);
+    }
+    header('Access-Control-Allow-Origin: *');
+    readfile($filePath);
+    exit;
+}
+
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Headers: Content-Type, Authorization');
@@ -21,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 
 spl_autoload_register(function ($class) {
     $prefix = 'App\\';
-    $baseDir = __DIR__ . '/../src/';
+    $baseDir = __DIR__ . '/src/';
 
     if (str_starts_with($class, $prefix)) {
         $relativeClass = substr($class, strlen($prefix));
@@ -32,7 +48,7 @@ spl_autoload_register(function ($class) {
     }
 });
 
-$configPath = __DIR__ . '/../config/config.php';
+$configPath = __DIR__ . '/config/config.php';
 if (!file_exists($configPath)) {
     Http::json(['error' => 'Missing config.php. Copy config/config.example.php to config/config.php and update credentials.'], 500);
 }
@@ -166,4 +182,5 @@ function getJsonBody(): array
     $decoded = json_decode($input, true);
     return is_array($decoded) ? $decoded : [];
 }
+
 

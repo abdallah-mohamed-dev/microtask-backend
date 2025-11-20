@@ -3,7 +3,9 @@ uploads/projects/*
 uploads/tasks/*
 !uploads/tasks/.gitkeep
 /config/config.php
+.gitignore
 .env
+info/infoPlus/
 vendor/
 *.log
 /.idea/
